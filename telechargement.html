@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Téléchargement - StatistikX</title>
+  <link rel="icon" href="logo.png" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0a0a0a;
+      color: #fff;
+      line-height: 1.6;
+      padding: 40px 20px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+      animation: fadeIn 1.5s ease;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #00d6ff;
+      margin-bottom: 10px;
+      animation: slideDown 1s ease;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #ccc;
+      margin-bottom: 30px;
+      animation: fadeIn 2s ease;
+    }
+
+    .links {
+      animation: slideUp 1.3s ease;
+    }
+
+    .links a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      color: #00d6ff;
+      border: 1px solid #00d6ff;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .links a:hover {
+      background-color: #00d6ff;
+      color: #000;
+    }
+
+    .copy-btn {
+      margin: 20px 0 10px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      background-color: #00d6ff;
+      color: black;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
+      animation: fadeIn 2s ease;
+    }
+
+    .copy-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #00d6ff88;
+    }
+
+    .code-block {
+      background-color: #111;
+      color: #00ff9f;
+      text-align: left;
+      padding: 20px;
+      border-radius: 10px;
+      font-family: Consolas, monospace;
+      overflow-x: auto;
+      animation: fadeIn 2.5s ease;
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      color: #555;
+      font-size: 0.9em;
+      opacity: 0.6;
+      animation: fadeIn 3s ease;
+    }
+
+    a {
+      transition: color 0.3s ease;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Votre téléchargement commence...</h1>
+    <p>Merci d'avoir choisi <strong>StatistikX</strong> 🚀<br>Profitez-en pour consulter ces ressources utiles :</p>
+
+    <div class="links">
+      <a href="https://www.tldraw.com/f/qwsEXZDY4bDYvE4icl-23?d=v-480.381.2257.1249" target="_blank">🔧 Procédure d'installation</a>
+      <a href="https://www.tldraw.com/f/dpuvffFYEU4yF0AVsGKbA?d=v-414.-180.1758.973" target="_blank">🖥️ Prérequis du système</a>
+    </div>
+
+    <h2 style="margin-top: 60px;">Code d'installation Python 🧑‍💻</h2>
+    <button class="copy-btn" onclick="copierCode()">📋 Copier ce script</button>
+
+    <div class="code-block">
+<pre id="codeBlock">
+pip install matplotlib tkinter 
+</pre>
+    </div>
+
+    <footer>
+      &copy; 2025 StatistikX - Tous droits réservés à CelestYassou – 
+      <a href="https://celestyassou.github.io/STATISTIKX/Politique_de_Confidentialit%C3%A9_et_CGU_STATISTIKX.html" style="color: #00d6ff;">Politique de Confidentialité & CGU</a>
+    </footer>
+  </div>
+
+  <script>
+    function copierCode() {
+      const texte = document.getElementById("codeBlock").innerText;
+      navigator.clipboard.writeText(texte)
+        .then(() => alert("✅ Code copié dans le presse-papiers"))
+        .catch(() => alert("❌ Impossible de copier le texte"));
+    }
+  </script>
+
+</body>
+</html>
