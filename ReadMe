@@ -1,0 +1,19 @@
+# 🚀 StatistikX
+
+> Analysez vos données. Révélez leur puissance.
+
+StatistikX est un outil de visualisation statistique conçu pour transformer vos fichiers Excel en tableaux de bord dynamiques et compréhensibles. Il est accompagné d'un site web moderne permettant le téléchargement du logiciel ainsi que l'accès à sa politique de confidentialité et ses conditions générales.
+
+---
+
+## 🧠 Fonctionnalités principales
+
+- 📊 Visualisation automatique des données Excel (barres, camemberts, stats)
+- 📂 Prise en charge des formats `.xlsx` et `.xls`
+- 🎨 Interface graphique conviviale avec Tkinter
+- ⚙️ Génération de graphiques à partir de modèles identifiés
+- 🌐 Site web de présentation avec design moderne
+
+---
+
+Veuillez lire la Politique de Confidentialité & CGU (voir site web)
