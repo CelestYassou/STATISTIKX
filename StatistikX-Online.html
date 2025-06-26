@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="icon" href="logo.png" />
+  <title>StatistikX - Propulsez vos données</title>
+  <!-- Bibliothèques JS -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Style inspiré de votre référence -->
+<style>
+    :root {
+        --primary: #00d6ff;
+        --primary-dark: #0289a4;
+        --bg: #121212;
+        --surface: #1f1f1f;
+        --surface-alt: #23272f;
+        --text: #e0e0e0;
+        --text-muted: #b0b0b0;
+        --accent: #00d6ff88;
+        --shadow: 0 4px 24px 0 #00d6ff33;
+        --radius: 14px;
+        --transition: 0.25s cubic-bezier(.4,0,.2,1);
+    }
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        color: var(--text);
+        font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+        font-size: 17px;
+        letter-spacing: 0.01em;
+        min-height: 100vh;
+        background-image: url('img.jpg');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+
+    header {
+        background: linear-gradient(120deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: #fff;
+        padding: 2.5rem 2rem 2rem 2rem;
+        text-align: center;
+        border-bottom-left-radius: var(--radius);
+        border-bottom-right-radius: var(--radius);
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, #0008 40%, transparent 100%);
+        pointer-events: none;
+    }
+
+    .header-img {
+        width: 90px;
+        height: 90px;
+        object-fit: contain;
+        margin-bottom: 1rem;
+        z-index: 1;
+        position: relative;
+        border-radius: 50%;
+        background: #fff2;
+        box-shadow: 0 2px 12px #00d6ff33;
+        border: 2px solid var(--primary);
+        display: inline-block;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 2.5rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        z-index: 1;
+        position: relative;
+        text-shadow: 0 2px 16px #000a;
+    }
+
+    main {
+        padding: 2.5rem 1rem 2rem 1rem;
+        max-width: 900px;
+        margin: 2rem auto 0 auto;
+        background: var(--surface);
+        border-radius: var(--radius);
+        /* box-shadow removed */
+    }
+
+    .controls {
+        margin-bottom: 2.5rem;
+        display: flex;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    input[type="file"] {
+        padding: 0.6rem 1rem;
+        background: var(--surface-alt);
+        border: 1.5px solid var(--accent);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 1rem;
+        transition: border-color var(--transition);
+        outline: none;
+    }
+    input[type="file"]:focus {
+        border-color: var(--primary);
+    }
+
+    button {
+        background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+        border: none;
+        color: #fff;
+        padding: 0.7rem 1.5rem;
+        font-size: 1.05rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+        box-shadow: 0 2px 12px #00d6ff33;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        outline: none;
+    }
+    button:hover:not(:disabled), button:focus-visible:not(:disabled) {
+        background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+        box-shadow: 0 4px 24px #00d6ff55;
+        transform: translateY(-2px) scale(1.03);
+    }
+    button:disabled {
+        background: #444a;
+        color: var(--text-muted);
+        box-shadow: none;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    #viewer {
+        position: relative;
+        min-height: 200px;
+        background: var(--surface-alt);
+        padding: 2rem 1.5rem;
+        border-radius: var(--radius);
+        /* box-shadow removed */
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow-x: auto;
+    }
+
+    /* Augmente la taille des stats circulaires (pie/doughnut) */
+    #viewer > canvas {
+        max-width: 420px;
+        max-height: 420px;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 auto 1.5rem auto;
+        display: block;
+        background: transparent;
+    }
+    /* Pour les petits écrans, ajuste la taille */
+    @media (max-width: 700px) {
+        #viewer > canvas {
+            max-width: 98vw;
+            max-height: 60vw;
+        }
+    }
+
+    .text-block {
+        font-family: 'Fira Mono', 'Consolas', 'Courier New', monospace;
+        white-space: pre-wrap;
+        background: #23272f;
+        border-left: 5px solid var(--primary);
+        padding: 1.2rem 1.5rem;
+        border-radius: 8px;
+        color: #f1f1f1;
+        line-height: 1.6;
+        font-size: 1.07rem;
+        margin: 0.5rem 0;
+        box-shadow: 0 2px 12px #00d6ff22;
+        word-break: break-word;
+    }
+
+    @media (max-width: 700px) {
+        main {
+            padding: 1rem 0.2rem;
+            margin: 1rem 0 0 0;
+            border-radius: 0;
+        }
+        #viewer {
+            padding: 1rem 0.2rem;
+            border-radius: 0;
+        }
+        .controls {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.7rem;
+        }
+    }
+</style>
+</head>
+<body>
+  <header>
+    <h1>STATISTIKX - Online</h1>
+  </header>
+  <main>
+    <div class="controls">
+      <input type="file" id="fileInput" accept=".xlsx,.xls"/>
+      <button id="prevBtn" disabled>⬅️ Précédent</button>
+      <button id="nextBtn" disabled>Suivant ➡️</button>
+    </div>
+    <div id="viewer"></div>
+  </main>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const viewer = document.getElementById('viewer');
+
+    let figures = [];
+    let currentIndex = 0;
+
+    fileInput.addEventListener('change', handleFile);
+    prevBtn.addEventListener('click', () => showFig(currentIndex - 1));
+    nextBtn.addEventListener('click', () => showFig(currentIndex + 1));
+
+    function handleFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      reader = new FileReader();
+      reader.onload = evt => processWorkbook(evt.target.result);
+      reader.readAsArrayBuffer(file);
+    }
+
+    function processWorkbook(data) {
+      const wb = XLSX.read(data, { type: 'array' });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+      // Variables similaires au script Python
+      const moisPort = {}, moisFix = {}, keywords = ["Probook", "2475AC9", "2475A37", "Latitude E6530", "Latitude e5530", "Latitude E6540", "HP ProBook 6570b"];
+      let win10 = 0, win11 = 0;
+      const statsRegions = {}, win10ParNum = {}, win11ParNum = {};
+      const globalStats = { nbFiles: 1, totalPort: 0, totalFix: 0, totalWin10: 0, totalWin11: 0, regions: new Set(), numeros: new Set() };
+
+      rows.forEach((r, i) => {
+        if (i === 0) return;
+        const a = String(r[0]||'').trim(), c = String(r[2]||'').trim(), d = String(r[3]||'').toLowerCase(), f = String(r[5]||'').trim();
+        if (!c) return;
+        const mois = (f.match(/(\d{2})\/(\d{2})\/\d{4}/)||[])[2];
+        const isPortable = keywords.some(k => c.includes(k));
+        if (isPortable && mois) moisPort[mois] = (moisPort[mois]||0)+1;
+        else if (mois) moisFix[mois] = (moisFix[mois]||0)+1;
+
+        if (d.includes('win 10')) win10++;
+        else if (d.includes('win 11')) win11++;
+
+        const num = (a.match(/\d+/)||[])[0];
+        if (num) {
+          if (d.includes('win 10')) { win10ParNum[num] = (win10ParNum[num]||0)+1; globalStats.numeroSet = true; }
+          else if (d.includes('win 11')) { win11ParNum[num] = (win11ParNum[num]||0)+1; }
+        }
+        const region = (a.match(/\b(0\d{3}|[1-9]\d{3})\b/)||[])[0];
+        if (region) {
+          if (!statsRegions[region]) statsRegions[region] = {win10:0, win11:0};
+          if (d.includes('win 10')) statsRegions[region].win10++;
+          else if (d.includes('win 11')) statsRegions[region].win11++;
+        }
+      });
+
+      // Accumulation globalStats
+      globalStats.totalPort = Object.values(moisPort).reduce((a,b)=>a+b,0);
+      globalStats.totalFix = Object.values(moisFix).reduce((a,b)=>a+b,0);
+      globalStats.totalWin10 = win10;
+      globalStats.totalWin11 = win11;
+      Object.keys(statsRegions).forEach(r=>globalStats.regions.add(r));
+      [...Object.keys(win10ParNum), ...Object.keys(win11ParNum)].forEach(n=>globalStats.numeros.add(n));
+
+      buildFigures(moisPort, moisFix, win10, win11, statsRegions, win10ParNum, win11ParNum, globalStats);
+      showFig(0);
+    }
+
+    function buildFigures(moisPort, moisFix, w10, w11, regions, w10num, w11num, gstats) {
+      figures = [];
+      const labelsMonth = [...new Set([...Object.keys(moisPort), ...Object.keys(moisFix)])].sort();
+
+      // Titre fichier
+      figures.push({
+        type: 'text', content: `Fichier importé :\nPortables : ${gstats.totalPort} • Fixes : ${gstats.totalFix}\nWin10 : ${w10} • Win11 : ${w11}`
+      });
+
+      // Bar chart mensuel
+      figures.push({ type: 'chart', config: {
+        type: 'bar',
+        data: {
+          labels: labelsMonth,
+          datasets: [
+            { label: "Portables", data: labelsMonth.map(m=>moisPort[m]||0), backgroundColor:"blue" },
+            { label: "Fixes",    data: labelsMonth.map(m=>moisFix[m]||0), backgroundColor:"orange" }
+          ]
+        },
+        options: { plugins:{ title:{display:true,text:"Renouvellement PC 2025 - Répartition mensuelle" }}}
+      }});
+
+      // Global pie chart
+      if (w10 + w11 > 0) {
+        figures.push({ type: 'chart', config: {
+          type:'pie', data:{
+            labels:["Windows 10","Windows 11"], datasets:[{ data:[w10,w11], backgroundColor:["skyblue","limegreen"] }]
+          },
+          options:{ plugins:{ title:{display:true,text:"Migration vers Windows 11"} } }
+        }});
+      }
+
+      // Régions
+      Object.entries(regions).forEach(([reg, d]) => {
+        const totalR = d.win10 + d.win11;
+        if (!totalR) return;
+        figures.push({ type: 'chart', config: {
+          type:'pie', data:{
+            labels:["Windows 10","Windows 11"], datasets:[{ data:[d.win10,d.win11], backgroundColor:["skyblue","limegreen"] }]
+          },
+          options:{ plugins:{ title:{display:true,text:`Migration – Région ${reg}`} } }
+        }});
+      });
+
+      // Text Win10/Win11 par numéro
+      let txt = '📋 Win10 / Win11 par numéro (col A) :\n';
+      [...new Set([...Object.keys(w10num), ...Object.keys(w11num)])].sort()
+        .forEach(num => {
+          txt += `Num ${num} : Win10=${w10num[num]||0}, Win11=${w11num[num]||0}\n`;
+        });
+      figures.push({ type:'text', content: txt });
+
+      // Pie par numéro
+      [...new Set([...Object.keys(w10num), ...Object.keys(w11num)])].sort()
+        .forEach(num => {
+          const v10 = w10num[num]||0, v11 = w11num[num]||0;
+          if (v10 + v11 > 0) {
+            figures.push({ type: 'chart', config: {
+              type:'pie', data:{
+                labels:["Windows 10","Windows 11"], datasets:[{ data:[v10,v11], backgroundColor:["skyblue","limegreen"] }]
+              },
+              options:{ plugins:{ title:{display:true,text:`Migration – Numéro ${num}`} } }
+            }});
+          }
+        });
+
+      // Statistiques globales
+      figures.push({
+        type: 'text',
+        content: `=== Statistiques Globales ===\nFichiers : ${gstats.nbFiles}\nPortables : ${gstats.totalPort}\nFixes : ${gstats.totalFix}\nWin10 : ${gstats.totalWin10}\nWin11 : ${gstats.totalWin11}\nRégions : ${gstats.regions.size}\nNuméros : ${gstats.numeros.size}`
+      });
+    }
+
+    function showFig(idx) {
+      if (idx < 0 || idx >= figures.length) return;
+      currentIndex = idx;
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === figures.length - 1;
+      viewer.innerHTML = '';
+
+      const f = figures[idx];
+      if (f.type === 'text') {
+        const div = document.createElement('div');
+        div.className = 'text-block';
+        div.textContent = f.content;
+        viewer.appendChild(div);
+      } else if (f.type === 'chart') {
+        const canvas = document.createElement('canvas');
+        viewer.appendChild(canvas);
+        new Chart(canvas, f.config);
+      }
+    }
+  </script>
+</body>
+</html>

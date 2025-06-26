@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StatistikX - Propulsez vos données</title>
+  <link rel="icon" href="logo.png" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    header {
+      height: 100vh;
+      background: url('img.jpg') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 4em;
+      font-weight: bold;
+      letter-spacing: 5px;
+      color: #fff;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    header p {
+      margin-top: 20px;
+      font-size: 1.3em;
+      color: #ccc;
+    }
+
+    .dark-section {
+      width: 100%;
+      padding: 100px 20px;
+      text-align: center;
+    }
+
+    .dark-section:nth-child(2) {
+      background-color: #0a0a0a;
+    }
+    .dark-section:nth-child(3) {
+      background-color: #111;
+    }
+    .dark-section:nth-child(4) {
+      background-color: #1a1a1a;
+    }
+
+    .dark-section h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #00d6ff;
+    }
+
+    .dark-section p {
+      font-size: 1.1em;
+      line-height: 1.8;
+      color: #ccc;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .btn-download {
+      display: inline-block;
+      margin-top: 40px;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: 2px solid #00d6ff;
+      border-radius: 50px;
+      color: white;
+      background: transparent;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s, transform 0.3s;
+    }
+
+    .btn-download:hover {
+      background: #00d6ff;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #00d6ff88;
+    }
+
+    footer {
+      padding: 30px;
+      text-align: center;
+      background-color: #111;
+      color: #666;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media(max-width: 600px) {
+      header h1 { font-size: 2.2em; }
+      .dark-section { padding: 60px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <h1>STATISTIKX</h1>
+    <p>Analysez vos données. Révélez leur puissance.</p>
+  </header>
+
+  <section class="dark-section">
+    <h2>Une Interface de Nouvelle Génération</h2>
+    <p>
+      StatistikX vous offre une visualisation intuitive, rapide et puissante de vos données grâce à des graphiques,
+      des indicateurs ainsi que des statistiques circulaire.
+    </p>
+  </section>
+
+  <section class="dark-section">
+    <h2>Pourquoi choisir StatistikX ?</h2>
+    <p>
+      Simple à utiliser, mais redoutablement puissant, StatistikX allie design, ergonomie et performance pour faire passer vos analyses à la vitesse lumière.
+    </p>
+  </section>
+
+  <section class="dark-section">
+    <h2>Téléchargement</h2>
+    <p>
+      Prêt à révolutionner vos tableaux ? Téléchargez StatistikX dès maintenant et transformez vos fichiers Excel en véritables tableaux de bord intelligents, utile et surtout pratique ! 
+    </p>
+    <a class="btn-download" href="STATISTIKX.1.2.zip" download onclick="window.open('telechargement.html')">Télécharger StatistikX 🚀 (vers : 1.2)</a>
+    <p><em><strong>StatistikX - Téléchargement</strong> vous garantit une utilisation optimale, sans connexion internet, pour une fiabilité maximale.</em></p>
+    <a class="btn-download" href="..." download>StatistikX - Online - Bêta 💻 (vers : 1.0)</a>
+    <p><em><strong>StatistikX - Online</strong> est également disponible en version bêta, pour une expérience sans installation, accessible depuis n'importe quel navigateur.</em></p>
+  </section>
+
+  <footer>
+    &copy; 2025 StatistikX - Tous droits réservés à CelestYassou - <a href="" style="color: #00d6ff;">Politique de Confidentialité & CGU</a>
+  </footer>
+
+</body>
+</html>
